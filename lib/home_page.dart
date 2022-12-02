@@ -56,6 +56,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           textAlign: TextAlign.center,
           "Слава Україні!",
@@ -75,11 +76,11 @@ class HomePage extends StatelessWidget {
               ),
             ),
             Container(
-              margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+              margin: const EdgeInsets.fromLTRB(0, 20.0, 0, 0),
               child: FloatingActionButton.extended(
                 backgroundColor: Colors.blue,
                 onPressed: () {
-                  Navigator.push<StatelessWidget>(
+                  Navigator.push<MaterialPageRoute>(
                     context,
                     MaterialPageRoute(builder: (context) => const SecondPage()),
                   );
@@ -109,33 +110,51 @@ class SecondPage extends StatefulWidget {
 }
 
 class _SecondPageState extends State<SecondPage> {
-  double defFontSize = 78.0;
-  Color randColor = Colors.amber;
+  double defFontSize = 64.0;
+  Color randBackgroundColor = Colors.amber;
+  Color randTextColor = Colors.blue;
+  Color randButtonColor = Colors.green;
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(seconds: 2),
-      curve: Curves.easeIn,
-      child: Material(
-        color: randColor,
-        child: InkWell(
-          child: Container(
-            alignment: Alignment.center,
-            child: Text(
-              "Hey There!",
-              style: TextStyle(
-                color: _generateColor(),
-                fontFamily: "Western",
-                fontSize: defFontSize,
+    return Material(
+      color: randBackgroundColor,
+      child: InkWell(
+        child: Column(
+          children: [
+            Container(
+              alignment: Alignment.topLeft,
+              margin: const EdgeInsets.all(10.0),
+              child: FloatingActionButton(
+                backgroundColor: randButtonColor,
+                child: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.of(context).push<MaterialPageRoute>(
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
+                },
               ),
             ),
-          ),
-          onTap: () {
-            setState(() {
-              randColor = _generateColor();
-            });
-          },
+            Container(
+              margin: const EdgeInsets.fromLTRB(0, 180.0, 0, 0),
+              alignment: Alignment.center,
+              child: Text(
+                "Hey There!",
+                style: TextStyle(
+                  color: randTextColor,
+                  fontFamily: "Western",
+                  fontSize: defFontSize,
+                ),
+              ),
+            ),
+          ],
         ),
+        onTap: () {
+          setState(() {
+            randBackgroundColor = _generateColor();
+            randTextColor = _generateColor();
+            randButtonColor = _generateColor();
+          });
+        },
       ),
     );
   }
@@ -144,26 +163,9 @@ class _SecondPageState extends State<SecondPage> {
 Color _generateColor() {
   const int alpha = 255;
   final rand = Random();
-  final int red = rand.nextInt(255);
-  final int green = rand.nextInt(255);
-  final int blue = rand.nextInt(255);
+  final int red = rand.nextInt(256);
+  final int green = rand.nextInt(256);
+  final int blue = rand.nextInt(256);
 
   return Color.fromARGB(alpha, red, green, blue);
 }
-// class SecondPage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     Color randColor = Colors.amber;
-
-//     return Center(
-//         child: AnimatedContainer(
-//             duration: const Duration(seconds: 2),
-//             color: randColor,
-//             alignment: Alignment.center,
-//             child: Material(child: InkWell(
-//               onTap: () {
-//                 setState(() {});
-//               },
-//             ))));
-//   }
-// }
