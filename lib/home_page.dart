@@ -56,7 +56,6 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         title: Text(
           textAlign: TextAlign.center,
           "Слава Україні!",
@@ -110,12 +109,26 @@ class SecondPage extends StatefulWidget {
 }
 
 class _SecondPageState extends State<SecondPage> {
+  String text = "Hello there!";
   double defFontSize = 64.0;
   Color randBackgroundColor = Colors.amber;
   Color randTextColor = Colors.blue;
   Color randButtonColor = Colors.green;
+
+  Color _generateColor() {
+    const int alpha = 255;
+    final rand = Random();
+    final int red = rand.nextInt(256);
+    final int green = rand.nextInt(256);
+    final int blue = rand.nextInt(256);
+
+    return Color.fromARGB(alpha, red, green, blue);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final style = Theme.of(context).textTheme.titleLarge;
+
     return Material(
       color: randBackgroundColor,
       child: InkWell(
@@ -128,21 +141,25 @@ class _SecondPageState extends State<SecondPage> {
                 backgroundColor: randButtonColor,
                 child: const Icon(Icons.arrow_back),
                 onPressed: () {
-                  Navigator.of(context).push<MaterialPageRoute>(
-                    MaterialPageRoute(builder: (context) => HomePage()),
-                  );
+                  Navigator.pop(context);
                 },
               ),
             ),
             Container(
               margin: const EdgeInsets.fromLTRB(0, 180.0, 0, 0),
               alignment: Alignment.center,
-              child: Text(
-                "Hey There!",
-                style: TextStyle(
-                  color: randTextColor,
-                  fontFamily: "Western",
-                  fontSize: defFontSize,
+              child: RichText(
+                text: TextSpan(
+                  children: [
+                    for (int i = 0; i < text.length; i++)
+                      TextSpan(
+                        text: text[i],
+                        style: style?.copyWith(
+                          color: _generateColor(),
+                          fontFamily: 'Western',
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ),
@@ -158,14 +175,4 @@ class _SecondPageState extends State<SecondPage> {
       ),
     );
   }
-}
-
-Color _generateColor() {
-  const int alpha = 255;
-  final rand = Random();
-  final int red = rand.nextInt(256);
-  final int green = rand.nextInt(256);
-  final int blue = rand.nextInt(256);
-
-  return Color.fromARGB(alpha, red, green, blue);
 }
